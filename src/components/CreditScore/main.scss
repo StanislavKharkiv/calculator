@@ -7,9 +7,16 @@
 }
 .credit-score__buttons {
   display: flex;
-  height: 35px;
+  box-shadow: 0 2px 8px -1px gray;
   .credit-score__btn {
     flex-grow: 1;
+    font-size: 20px;
+    padding: 10px 2px;
+    transition: .4s;
+    border: 1px solid gray;
+    &:hover {
+      box-shadow: inset 0 0 6px gray;
+    }
   }
   .credit-score__btn_active {
     background: blue;

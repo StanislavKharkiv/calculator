@@ -7,6 +7,7 @@
 }
 .months__buttons {
   display: flex;
+  box-shadow: 0 2px 8px -1px gray;
   .months-buttons__btn {
     flex-grow: 1;
   }
