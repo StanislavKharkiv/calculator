@@ -1,0 +1,13 @@
+.months {
+  margin-bottom: 30px;
+}
+.months__header {
+  font-size: 20px;
+  margin-bottom: 5px;
+}
+.months__buttons {
+  display: flex;
+  .months-buttons__btn {
+    flex-grow: 1;
+  }
+}

@@ -1,0 +1,19 @@
+.credit-score {
+  margin-bottom: 20px;
+}
+.credit-score__header {
+  margin-bottom: 5px;
+  font-size: 20px;
+}
+.credit-score__buttons {
+  display: flex;
+  height: 35px;
+  .credit-score__btn {
+    flex-grow: 1;
+  }
+  .credit-score__btn_active {
+    background: blue;
+    color: white;
+    border: 1px solid blue;
+  }
+}

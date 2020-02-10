@@ -1,0 +1,12 @@
+.months-buttons__btn {
+  padding: 4px 10px;
+  border: 1px solid gray;
+  transition: .5s;
+  outline: none;
+  cursor: pointer;
+}
+.months-buttons__btn_active {
+  background: blue;
+  color: white;
+  border: 1px solid blue;
+}

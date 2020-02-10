@@ -1,0 +1,24 @@
+.input-block {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+.input-block__header {
+  font-size: 18px;
+}
+.input-block__input {
+  display: flex;
+  height: 22px;
+  @mixin inputStyle {
+    border: 1px solid gray;
+  }
+  span {
+    @include inputStyle;
+    width: 22px;
+    text-align: center;
+    background: lightgray;
+  }
+  input {
+    @include inputStyle;
+  }
+}
