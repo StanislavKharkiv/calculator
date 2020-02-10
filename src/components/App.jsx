@@ -9,6 +9,7 @@ class App extends Component {
     this.state = {
       msrp: 40000,
       activeTab: 'loan',
+      moneyInMonth: 0,
     };
   }
 
@@ -17,7 +18,7 @@ class App extends Component {
   };
 
   render() {
-    const { activeTab, msrp } = this.state;
+    const { activeTab, msrp, moneyInMonth } = this.state;
     let renderElement = <h1>404</h1>;
 
     if (activeTab === 'loan') renderElement = <Loan price={msrp} />;
@@ -28,7 +29,7 @@ class App extends Component {
         <div className="tab-wrapper">
           <Tab
             name="Loan"
-            money={777}
+            money={moneyInMonth}
             active={activeTab === 'loan' ? 'tab__active' : ''}
             onClick={this.handleClickTabs}
           />

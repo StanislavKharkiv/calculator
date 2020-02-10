@@ -11,7 +11,7 @@ class Loan extends Component {
     this.state = {
       downPayment: 0,
       tradeIn: 0,
-      APR: 0,
+      APR: 1,
       months: 36,
       creditScore: '750 - 800',
       postCode: 0,
@@ -32,6 +32,15 @@ class Loan extends Component {
     if (targetName === 'payment') this.setState({ downPayment: e.target.value });
     if (targetName === 'apr') this.setState({ APR: e.target.value });
     if (targetName === 'postCode') this.setState({ postCode: e.target.value });
+    this.loanCalculation();
+  };
+
+  loanCalculation = () => {
+    const { months, creditScore, tradeIn, downPayment, APR } = this.state;
+    const { price } = this.props;
+    console.log(parseInt(creditScore, 10));
+    const loanCalculationResult = ((price - tradeIn - downPayment) * 0.95 * APR) / months;
+    console.log(loanCalculationResult);
   };
 
   render() {
