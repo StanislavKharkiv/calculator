@@ -11,19 +11,36 @@ class Loan extends Component {
     this.state = {
       downPayment: 0,
       tradeIn: 0,
-      APR: 1,
+      APR: 0,
       months: 36,
       creditScore: '750 - 800',
       postCode: 0,
     };
   }
 
+  componentDidMount() {
+    this.loanCalculation();
+  }
+
   handleMonthsChange = e => {
-    this.setState({ months: +e.target.textContent });
+    const promise = new Promise(resolve => {
+      this.setState({ months: +e.target.textContent });
+      resolve();
+    });
+    promise.then(() => {
+      this.loanCalculation();
+    });
   };
 
   handleCreditScoreChange = e => {
     this.setState({ creditScore: e.target.textContent });
+    const promise = new Promise(resolve => {
+      this.setState({ creditScore: e.target.textContent });
+      resolve();
+    });
+    promise.then(() => {
+      this.loanCalculation();
+    });
   };
 
   handleInputBlockChange = e => {
@@ -32,15 +49,23 @@ class Loan extends Component {
     if (targetName === 'payment') this.setState({ downPayment: e.target.value });
     if (targetName === 'apr') this.setState({ APR: e.target.value });
     if (targetName === 'postCode') this.setState({ postCode: e.target.value });
+  };
+
+  handleInputBlur = () => {
     this.loanCalculation();
   };
 
   loanCalculation = () => {
     const { months, creditScore, tradeIn, downPayment, APR } = this.state;
-    const { price } = this.props;
-    console.log(parseInt(creditScore, 10));
-    const loanCalculationResult = ((price - tradeIn - downPayment) * 0.95 * APR) / months;
-    console.log(loanCalculationResult);
+    const { price, moneyCalc } = this.props;
+    let creditScoreCoefficient;
+    if (parseInt(creditScore, 10) <= 650) creditScoreCoefficient = 1.2;
+    if (parseInt(creditScore, 10) === 700) creditScoreCoefficient = 1.05;
+    if (parseInt(creditScore, 10) === 750) creditScoreCoefficient = 1;
+    if (parseInt(creditScore, 10) >= 800) creditScoreCoefficient = 0.95;
+    const aprPercent = APR === 0 ? 1 : ((price - tradeIn - downPayment) / 100) * APR;
+    const loanCalculationResult = ((price - tradeIn - downPayment) * creditScoreCoefficient + aprPercent) / months;
+    moneyCalc(loanCalculationResult.toFixed());
   };
 
   render() {
@@ -56,6 +81,7 @@ class Loan extends Component {
           value={tradeIn}
           name="trade-in"
           onChange={this.handleInputBlockChange}
+          onBlur={this.handleInputBlur}
         />
         <InputBlock
           header="Down Payment"
@@ -63,6 +89,7 @@ class Loan extends Component {
           value={downPayment}
           name="payment"
           onChange={this.handleInputBlockChange}
+          onBlur={this.handleInputBlur}
         />
         <CreditScore onClick={this.handleCreditScoreChange} value={creditScore} />
         <InputBlock
@@ -71,6 +98,7 @@ class Loan extends Component {
           value={APR}
           name="apr"
           onChange={this.handleInputBlockChange}
+          onBlur={this.handleInputBlur}
         />
         <InputBlock
           header="For ZIP Code"
@@ -78,6 +106,7 @@ class Loan extends Component {
           value={postCode}
           name="postCode"
           onChange={this.handleInputBlockChange}
+          onBlur={this.handleInputBlur}
         />
         <Taxes />
       </section>

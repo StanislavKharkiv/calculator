@@ -17,11 +17,15 @@ class App extends Component {
     this.setState({ activeTab: e.currentTarget.getAttribute('data-name') });
   };
 
+  handleMoneyCalc = money => {
+    this.setState({ moneyInMonth: money });
+  };
+
   render() {
     const { activeTab, msrp, moneyInMonth } = this.state;
     let renderElement = <h1>404</h1>;
 
-    if (activeTab === 'loan') renderElement = <Loan price={msrp} />;
+    if (activeTab === 'loan') renderElement = <Loan price={msrp} moneyCalc={this.handleMoneyCalc} />;
     if (activeTab === 'lease') renderElement = <Lease />;
 
     return (
