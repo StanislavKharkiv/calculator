@@ -65,7 +65,7 @@ class Loan extends Component {
     if (parseInt(creditScore, 10) >= 800) creditScoreCoefficient = 0.95;
     const aprPercent = APR === 0 ? 1 : ((price - tradeIn - downPayment) / 100) * APR;
     const loanCalculationResult = ((price - tradeIn - downPayment) * creditScoreCoefficient + aprPercent) / months;
-    moneyCalc(loanCalculationResult.toFixed());
+    moneyCalc('moneyInMonthLoan', loanCalculationResult.toFixed());
   };
 
   render() {

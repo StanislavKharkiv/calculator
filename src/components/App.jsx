@@ -9,7 +9,8 @@ class App extends Component {
     this.state = {
       msrp: 40000,
       activeTab: 'loan',
-      moneyInMonth: 0,
+      moneyInMonthLoan: 0,
+      moneyInMonthLease: 0,
     };
   }
 
@@ -17,29 +18,29 @@ class App extends Component {
     this.setState({ activeTab: e.currentTarget.getAttribute('data-name') });
   };
 
-  handleMoneyCalc = money => {
-    this.setState({ moneyInMonth: money });
+  handleMoneyCalc = (name, money) => {
+    this.setState({ [name]: money });
   };
 
   render() {
-    const { activeTab, msrp, moneyInMonth } = this.state;
+    const { activeTab, msrp, moneyInMonthLoan, moneyInMonthLease } = this.state;
     let renderElement = <h1>404</h1>;
 
     if (activeTab === 'loan') renderElement = <Loan price={msrp} moneyCalc={this.handleMoneyCalc} />;
-    if (activeTab === 'lease') renderElement = <Lease />;
+    if (activeTab === 'lease') renderElement = <Lease price={msrp} moneyCalc={this.handleMoneyCalc} />;
 
     return (
       <>
         <div className="tab-wrapper">
           <Tab
             name="Loan"
-            money={moneyInMonth}
+            money={moneyInMonthLoan}
             active={activeTab === 'loan' ? 'tab__active' : ''}
             onClick={this.handleClickTabs}
           />
           <Tab
             name="Lease"
-            money={555}
+            money={moneyInMonthLease}
             active={activeTab === 'lease' ? 'tab__active' : ''}
             onClick={this.handleClickTabs}
           />

@@ -1,0 +1,12 @@
+.lease {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+.lease-block {
+  width: 40%;
+  margin-bottom: 20px;
+  &__header {
+    margin-bottom: 5px;
+  }
+}
