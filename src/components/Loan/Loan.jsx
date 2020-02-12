@@ -3,35 +3,112 @@ import LoanHeader from '../LoanHeader/LoanHeader';
 import Month from '../Month/Month';
 import InputBlock from '../InputBlock/InputBlock';
 import CreditScore from '../CreditScore/CreditScore';
+import Taxes from '../Taxes/Taxes';
 
 class Loan extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      downPayment: 0,
+      tradeIn: 0,
+      APR: 0,
       months: 36,
       creditScore: '750 - 800',
+      postCode: 0,
     };
   }
 
+  componentDidMount() {
+    this.loanCalculation();
+  }
+
   handleMonthsChange = e => {
-    this.setState({ months: +e.target.textContent });
+    const promise = new Promise(resolve => {
+      this.setState({ months: +e.target.textContent });
+      resolve();
+    });
+    promise.then(() => {
+      this.loanCalculation();
+    });
   };
 
   handleCreditScoreChange = e => {
     this.setState({ creditScore: e.target.textContent });
+    const promise = new Promise(resolve => {
+      this.setState({ creditScore: e.target.textContent });
+      resolve();
+    });
+    promise.then(() => {
+      this.loanCalculation();
+    });
+  };
+
+  handleInputBlockChange = e => {
+    const targetName = e.target.getAttribute('data-name');
+    if (targetName === 'trade-in') this.setState({ tradeIn: e.target.value });
+    if (targetName === 'payment') this.setState({ downPayment: e.target.value });
+    if (targetName === 'apr') this.setState({ APR: e.target.value });
+    if (targetName === 'postCode') this.setState({ postCode: e.target.value });
+  };
+
+  handleInputBlur = () => {
+    this.loanCalculation();
+  };
+
+  loanCalculation = () => {
+    const { months, creditScore, tradeIn, downPayment, APR } = this.state;
+    const { price, moneyCalc } = this.props;
+    let creditScoreCoefficient;
+    if (parseInt(creditScore, 10) <= 650) creditScoreCoefficient = 1.2;
+    if (parseInt(creditScore, 10) === 700) creditScoreCoefficient = 1.05;
+    if (parseInt(creditScore, 10) === 750) creditScoreCoefficient = 1;
+    if (parseInt(creditScore, 10) >= 800) creditScoreCoefficient = 0.95;
+    const aprPercent = APR === 0 ? 1 : ((price - tradeIn - downPayment) / 100) * APR;
+    const loanCalculationResult = ((price - tradeIn - downPayment) * creditScoreCoefficient + aprPercent) / months;
+    moneyCalc('moneyInMonthLoan', loanCalculationResult.toFixed());
   };
 
   render() {
-    const { months, creditScore } = this.state;
+    const { months, creditScore, tradeIn, downPayment, APR, postCode } = this.state;
     const { price } = this.props;
     return (
       <section className="loan">
         <LoanHeader price={price} />
         <Month months={months} onClick={this.handleMonthsChange} />
-        <InputBlock header="Trade-In Value" inputSymbol="left" />
-        <InputBlock header="Down Payment" inputSymbol="left" />
-        <CreditScore onClick={this.handleCreditScoreChange} creditScore={creditScore} />
-        <InputBlock header="Estimated APR" inputSymbol="right" />
+        <InputBlock
+          header="Trade-In Value"
+          inputSymbol="left"
+          value={tradeIn}
+          name="trade-in"
+          onChange={this.handleInputBlockChange}
+          onBlur={this.handleInputBlur}
+        />
+        <InputBlock
+          header="Down Payment"
+          inputSymbol="left"
+          value={downPayment}
+          name="payment"
+          onChange={this.handleInputBlockChange}
+          onBlur={this.handleInputBlur}
+        />
+        <CreditScore onClick={this.handleCreditScoreChange} value={creditScore} />
+        <InputBlock
+          header="Estimated APR"
+          inputSymbol="right"
+          value={APR}
+          name="apr"
+          onChange={this.handleInputBlockChange}
+          onBlur={this.handleInputBlur}
+        />
+        <InputBlock
+          header="For ZIP Code"
+          inputSymbol="*"
+          value={postCode}
+          name="postCode"
+          onChange={this.handleInputBlockChange}
+          onBlur={this.handleInputBlur}
+        />
+        <Taxes />
       </section>
     );
   }

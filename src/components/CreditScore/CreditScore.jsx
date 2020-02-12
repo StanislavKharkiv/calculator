@@ -11,11 +11,11 @@ function numbersOfCreditScore(start, end, step) {
   });
 }
 
-export default function CreditScore({ onClick, creditScore }) {
+export default function CreditScore({ onClick, value }) {
   const scoreArrData = numbersOfCreditScore(600, 900, 50);
   const scoreArrBlocks = scoreArrData.map(el => (
     <button
-      className={`credit-score__btn ${creditScore === el ? 'credit-score__btn_active' : ''}`}
+      className={`credit-score__btn ${value === el ? 'credit-score__btn_active' : ''}`}
       type="button"
       onClick={onClick}
       key={el}
